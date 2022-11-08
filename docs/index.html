@@ -1,1 +1,34 @@
-<h1>JAMES</h1>
+<!--
+    JAMES VUONG
+    CPSC 332
+    HW5
+    Modified from https://github.com/end3r/Gamedev-Canvas-workshop
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head> 
+    <meta charset="utf-8" />
+    <title>Breakout</title>
+
+    <link rel="stylesheet" href="stylesheet.css">
+
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="480" height="320"></canvas>
+    <div>
+        <fieldset id="options">
+            <legend>Options:</legend>
+            <button type="button" id="pauseButton">Pause Game</button><br>
+            <!-- <button type="range">Change Speed</button><br> -->
+            <label for="xSlider">Choose Speed</label>
+            <input type="range" min="x" max="y" value="50" class="slider" id="xSlider"><br>
+            <button type="button" id="playButton">Continue Playing</button><br>
+            <button type="button" id="reloadButton">Reload Window</button>
+        </fieldset>
+    </div>
+</body>
+
+</html>

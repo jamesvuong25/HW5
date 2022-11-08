@@ -1,0 +1,25 @@
+
+    /* JAMES VUONG
+    CPSC 332
+    HW5
+    Modified from https://github.com/end3r/Gamedev-Canvas-workshop */
+
+
+* { 
+    padding: 0;
+    margin: 0;
+}
+
+canvas {
+    background: #eee;
+    display: block;
+    margin: 0 auto;
+}
+
+#options {
+    width: 65%;
+    text-align: center;
+    position: relative;
+    top: 50px;
+    left: 140px;
+}
