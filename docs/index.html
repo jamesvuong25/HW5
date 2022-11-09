@@ -22,9 +22,10 @@
         <fieldset id="options">
             <legend>Options:</legend>
             <button type="button" id="pauseButton">Pause Game</button><br>
-            <!-- <button type="range">Change Speed</button><br> -->
-            <label for="xSlider">Choose Speed</label>
-            <input type="range" min="x" max="y" value="50" class="slider" id="xSlider"><br>
+            <label for="xSlider" style="width:100px; display:inline-block">
+                Speed:<b id="xScale"></b> 
+             </label>
+             <input id="xSlider" type="range" min="0.05" max="4" step="0.05" value="1"> <br>
             <button type="button" id="playButton">Continue Playing</button><br>
             <button type="button" id="reloadButton">Reload Window</button>
         </fieldset>

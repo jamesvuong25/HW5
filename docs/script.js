@@ -28,6 +28,7 @@ window.onload = function () {
     var brickOffsetLeft = 30;
     var score = 0;
     var lives = 3;
+    var pause = true;
 
     var bricks = [];
 
@@ -78,8 +79,8 @@ window.onload = function () {
                         score++;
                         if (score == brickRowCount * brickColumnCount) {
                             //TODO: draw message on the canvas
-                            ctx.font = "65px Arial";
-                            ctx.fillText("YOU LOST! BETTER LUCK NEXT TIME!", 155, 165, canvas.width - 300, canvas.height - 275);
+                            ctx.font = "45px Arial";
+                            ctx.fillText("YOU WIN!", 155, 165, canvas.width - 300, canvas.height - 275);
                             //TODO: pause game instead of reloading
                             document.location.save();
                         }
@@ -158,8 +159,8 @@ window.onload = function () {
                 lives--;
                 if (lives <= 0) {
                     //TODO: draw message on the canvas
-                    ctx.font = "65px Arial";
-                    ctx.strokeText("YOU LOST! BETTER LUCK NEXT TIME!", 155, 165, canvas.width - 300, canvas.height - 275);
+                    ctx.font = "45px Arial";
+                    ctx.fillText("YOU LOST!", 155, 165, canvas.width - 300, canvas.height - 275);
                     
                     //TODO: pause game instead of reloading
                     document.location.save();
@@ -180,14 +181,16 @@ window.onload = function () {
         else if (leftPressed && paddleX > 0) {
             paddleX -= 7;
         }
-
+ 
         //TODO: adjust speed
-        // adjustGameSpeed();
-        x += dx * x slider.value;
-        y += dy;
+        adjustGameSpeed();
+        // x = x * xSlider.value;
+        // x += dx;
+        // y += dy;
 
 
         //TODO: pause game check
+        // togglePauseGame();
 
         requestAnimationFrame(draw);
     }
@@ -199,7 +202,7 @@ window.onload = function () {
     //Additional variables used to help make dimensions/locations easier to reuse :           
     //controls game speed            
     //pause game variable            
-    pauseButton = document.getElementById("pauseButton");
+    // pauseButton = document.getElementById("pauseButton");
     //high score tracking variables
 
     //other variables?            
@@ -209,17 +212,19 @@ window.onload = function () {
     //pause game event handler            
     //start a new game event handler            
     //continue playing
-    //reload click event listener            
+    //reload click event listener      
+    // runningScore += score;      
 
     //Drawing a high score
     function drawHighScore() {
         ctx.fillStyle = color1;
         ctx.fillText("High Score:" + score, 175, 20, canvas.width - 300, canvas.height - 275);
     }; 
-
+ 
     //draw the menu screen, including labels and button
-    function drawMenu() {
-        //draw the rectangle menu backdrop
+    function drawMenu() { 
+        setShadow(); 
+        //draw the rectangle menu backdrop 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "cornflowerblue";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -232,7 +237,7 @@ window.onload = function () {
         ctx.font = "27px Arial";
         ctx.fillText("BREAKOUT", 165, 85, canvas.width - 300, canvas.height - 275);
 
-        //draw the menu header
+        //draw the menu header 
         
 
         //start game button area
@@ -242,8 +247,8 @@ window.onload = function () {
         ctx.fillText("Start Game!", 160, 175, canvas.width - 300, canvas.height - 275);
 
         //event listener for clicking start
-        setShadow();
-        startGameClick();
+        canvas.addEventListener("click", startGameClick, false);
+        // startGameClick();
         //need to add it here because the menu should be able to come back after 
         //we remove the it later                
     };
@@ -251,9 +256,9 @@ window.onload = function () {
     //function used to set shadow properties
     function setShadow() {
         ctx.shadowColor = "black";
-        ctx.shadowBlur = 6;
-        ctx.shadowOffsetX = 6;
-        ctx.shadowOffsetY = 6;
+        ctx.shadowBlur = 5;
+        ctx.shadowOffsetX = 10;
+        ctx.shadowOffsetY = 3;
         // var box = document.getElementById("canvas").style.boxShadow = "5px 10px 15px lightblue";
     };
 
@@ -268,8 +273,10 @@ window.onload = function () {
     //function to clear the menu when we want to start the game
     function clearMenu() {
         //remove event listener for menu, 
+        canvas.removeEventListener("click", startGameClick, false);
         //we don't want to trigger the start game click event during a game   
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        resetShadow();
         draw();             
     };
 
@@ -278,9 +285,8 @@ window.onload = function () {
     //i.e., did the user click in the bounds of where the button is drawn
     //if so, we want to trigger the draw(); function to start our game
     function startGameClick(event) {
-        let startGameButton = document.addEventListener("click", function(e) {
-            const xCoord = e.offsetX;
-            const yCoord = e.offsetY;
+            const xCoord = event.offsetX;
+            const yCoord = event.offsetY;
 
             // if user clicks anywhere in the "Start Breakout" rectangle
             if (xCoord > 140)
@@ -288,23 +294,34 @@ window.onload = function () {
                     if (yCoord > 140)
                         if (yCoord < 320)
                             clearMenu();
-        });
     };
 
     //function to handle game speed adjustments when we move our slider
     function adjustGameSpeed() {
         //update the slider display                
-        //update the game speed multiplier    
+        //update the game speed multiplier  
+        xScaleElem = document.getElementById("xScale");
+        xSlider = document.getElementById("xSlider");  
         xSlider.addEventListener("input", function() {
             xScaleElem.innerHTML = xSlider.value;
-        })            
+        })          
+        x += dx * xSlider.value;
+        y += dy * xSlider.value;  
     };
 
     //function to toggle the play/paused game state
+    pauseButton = document.getElementById("pauseButton");
+    pauseButton.addEventListener("click", togglePauseGame);
     function togglePauseGame() {
         //toggle state         
-        // pause = !pause;       
         //if we are not paused, we want to continue animating (hint: zyBook 8.9)
+        if (!pause) {
+            pause = true;
+            // cancelAnimationFrame(draw);
+        }
+        else {
+            paused = false;
+        }
 
     };
 
@@ -322,15 +339,34 @@ window.onload = function () {
 
     //function to reset the board and continue playing (accumulate high score)
     //should make sure we didn't lose before accumulating high score
+    
     function continuePlaying() {
 
     };
 
     //function to reset starting game info
+    reloadButton = document.getElementById(reloadButton);
+    // reloadButtons.addEventListener("click", function() {
+    //     console.log("HI");
+    // });
     function resetBoard(resetLives) {
         //reset paddle position
-        //reset bricks               
-        //reset score and lives               
+        paddleHeight = 10;
+        paddleWidth = 75;
+        paddleX = (canvas.width - paddleWidth) / 2;
+
+        //reset bricks
+        for (var c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (var r = 0; r < brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }     
+
+        //reset score and lives
+        score = 0;
+        lives = 3;
+
     };
 
     //draw the menu.
