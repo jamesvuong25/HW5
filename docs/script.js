@@ -27,6 +27,7 @@ window.onload = function () {
     var brickOffsetTop = 30;
     var brickOffsetLeft = 30;
     var score = 0;
+    var highScore = 0;
     var lives = 3;
     var pause = true;
 
@@ -77,6 +78,7 @@ window.onload = function () {
                         dy = -dy;
                         b.status = 0;
                         score++;
+                        highScore++;
                         if (score == brickRowCount * brickColumnCount) {
                             //TODO: draw message on the canvas
                             ctx.font = "45px Arial";
@@ -217,8 +219,9 @@ window.onload = function () {
 
     //Drawing a high score
     function drawHighScore() {
+
         ctx.fillStyle = color1;
-        ctx.fillText("High Score:" + score, 175, 20, canvas.width - 300, canvas.height - 275);
+        ctx.fillText("High Score:" + highScore, 175, 20, canvas.width - 300, canvas.height - 275);
     }; 
  
     //draw the menu screen, including labels and button
@@ -341,46 +344,78 @@ window.onload = function () {
     //should make sure we didn't lose before accumulating high score
     
     function continuePlaying() {
-
-    };
-
-    //function to reset starting game info
-    // reloadButtons.addEventListener("click", function() {
-    //     console.log("HI");
-    // });
-    function resetBoard(resetLives) {
-        //reset paddle position
-        var ballRadius = 10;
-        var x = canvas.width / 2;
-        var y = canvas.height - 30;
-        var dx = 2;
-        var dy = -2;
-        var paddleHeight = 10;
-        var paddleWidth = 75;
-        var paddleX = (canvas.width - paddleWidth) / 2;
-        var rightPressed = false;
-        var leftPressed = false;
-        var brickRowCount = 5;
-        var brickColumnCount = 3;
-        var brickWidth = 75;
-        var brickHeight = 20;
-        var brickPadding = 10;
-        var brickOffsetTop = 30;
-        var brickOffsetLeft = 30;
-        var score = 0;
-        var lives = 3;
-        var pause = true;
-    
-        var bricks = [];
+        ballRadius = 10;
+        x = canvas.width / 2;
+        y = canvas.height - 30;
+        dx = 2;
+        dy = -2;
+        paddleHeight = 10;
+        paddleWidth = 75;
+        paddleX = (canvas.width - paddleWidth) / 2;
+        rightPressed = false;
+        leftPressed = false;
+        brickRowCount = 5;
+        brickColumnCount = 3;
+        brickWidth = 75;
+        brickHeight = 20;
+        brickPadding = 10;
+        brickOffsetTop = 30;
+        brickOffsetLeft = 30;
+        score = 0;
+        bricks = [];
     
         for (var c = 0; c < brickColumnCount; c++) {
             bricks[c] = [];
             for (var r = 0; r < brickRowCount; r++) {
                 bricks[c][r] = { x: 0, y: 0, status: 1 };
             }
-        }  
+        } 
     };
+    contButton = document.getElementById("contButton");
+    contButton.addEventListener("click", function() {
+        continuePlaying();
+    });
 
+    //function to reset starting game info
+    function resetBoard() {
+        //reset paddle position
+        ballRadius = 10;
+        x = canvas.width / 2;
+        y = canvas.height - 30;
+        dx = 2;
+        dy = -2;
+        paddleHeight = 10;
+        paddleWidth = 75;
+        paddleX = (canvas.width - paddleWidth) / 2;
+        rightPressed = false;
+        leftPressed = false;
+        brickRowCount = 5;
+        brickColumnCount = 3;
+        brickWidth = 75;
+        brickHeight = 20;
+        brickPadding = 10;
+        brickOffsetTop = 30;
+        brickOffsetLeft = 30;
+        score = 0;
+        highScore = 0;
+        lives = 3;
+        bricks = [];
+    
+        for (var c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (var r = 0; r < brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }
+    };
+    
+    resetButton = document.getElementById("resetButton");
+    resetButton.addEventListener("click", function() {
+        resetBoard();
+    });
+
+
+    //reload window button
     reloadButton = document.getElementById("reloadButton");
     reloadButton.addEventListener("click", function() {
         window.location.reload();
